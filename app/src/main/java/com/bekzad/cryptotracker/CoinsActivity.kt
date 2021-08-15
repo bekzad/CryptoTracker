@@ -1,10 +1,10 @@
 package com.bekzad.cryptotracker
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
-import androidx.databinding.DataBindingUtil
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.bekzad.cryptotracker.databinding.ActivityCoinsBinding
 
 class CoinsActivity : AppCompatActivity() {
@@ -15,7 +15,5 @@ class CoinsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityCoinsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        
     }
 }

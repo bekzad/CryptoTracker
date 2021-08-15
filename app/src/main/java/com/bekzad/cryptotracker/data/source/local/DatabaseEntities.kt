@@ -18,6 +18,8 @@ data class DatabaseCoin (
     val symbol: String,
     val name: String,
     val image: String,
+    @ColumnInfo(name = "market_cap_rank")
+    val marketCapRank: Int,
     @ColumnInfo(name = "current_price")
     val currentPrice: String,
     @ColumnInfo(name = "market_cap")
@@ -33,6 +35,8 @@ data class DatabaseCoinDetail(
     val symbol: String,
     val name: String,
     val image: String,
+    @ColumnInfo(name = "market_cap_rank")
+    val marketCapRank: Int,
     @ColumnInfo(name = "current_price")
     val currentPrice: String,
     @ColumnInfo(name = "market_cap")
@@ -44,10 +48,11 @@ data class DatabaseCoinDetail(
 fun List<DatabaseCoin>.asDomainModel(): List<Coin> =
     this.map { Coin(
         id = it.id,
+        marketCapRank = it.marketCapRank,
         symbol = it.symbol,
         name = it.name,
         image = it.image,
-        currentPrice = it.currentPrice.toBigDecimal(),
+        currentPrice = it.currentPrice.toDouble(),
         marketCap = it.marketCap,
-        priceChange = it.priceChange.toBigDecimal())
+        priceChange = it.priceChange.toDouble())
     }

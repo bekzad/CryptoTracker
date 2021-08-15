@@ -14,6 +14,7 @@ data class NetworkCoin (
     val symbol: String,
     val name: String,
     val image: String,
+    @Json(name = "market_cap_rank") val marketCapRank: Int,
     @Json(name = "current_price") val currentPrice: String,
     @Json(name = "market_cap") val marketCap: Long,
     @Json(name = "price_change_percentage_24h") val priceChange: String
@@ -25,6 +26,7 @@ data class NetworkCoinDetail(
     val symbol: String,
     val name: String,
     val image: String,
+    @Json(name = "market_cap_rank") val marketCapRank: Int,
     @Json(name = "current_price") val currentPrice: String,
     @Json(name = "market_cap") val marketCap: Long,
     @Json(name = "price_change_percentage_24h")
@@ -34,17 +36,19 @@ data class NetworkCoinDetail(
 fun List<NetworkCoin>.asDomainModel(): List<Coin> =
     this.map { Coin(
         id = it.id,
+        marketCapRank = it.marketCapRank,
         symbol = it.symbol,
         name = it.name,
         image = it.image,
-        currentPrice = it.currentPrice.toBigDecimal(),
+        currentPrice = it.currentPrice.toDouble(),
         marketCap = it.marketCap,
-        priceChange = it.priceChange.toBigDecimal())
+        priceChange = it.priceChange.toDouble())
     }
 
 fun List<NetworkCoin>.asDatabaseModel(): Array<DatabaseCoin> =
     this.map { DatabaseCoin(
         id = it.id,
+        marketCapRank = it.marketCapRank,
         symbol = it.symbol,
         name = it.name,
         image = it.image,

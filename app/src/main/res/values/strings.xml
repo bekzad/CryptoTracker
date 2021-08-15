@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">CryptoTracker</string>
+    <string name="coin_logo">Logo of a coin</string>
+    <string name="position_number">#</string>
+    <string name="symbol_header_text">Coin</string>
+    <string name="price_header_text">Price</string>
+    <string name="price_change_header_text">24H</string>
+    <string name="market_cap_header_text">Market Cap</string>
+    <string name="market_cap">$%,d</string>
+    <string name="market_cap_rank">%,d</string>
+    <string name="price_change">%.1f%%</string>
+    <string name="current_price">$%,.2f</string>
 </resources>

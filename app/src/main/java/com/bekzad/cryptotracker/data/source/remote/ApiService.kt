@@ -38,7 +38,8 @@ private val moshi = Moshi.Builder()
         .build()
 
 /**
- * A retrofit service to fetch a devbyte playlist.
+ * A retrofit service to fetch data from server
+ * Extends the CoinsDataSource so that we could test easily
  */
 interface CoinGekkoApiService {
     @GET("coins/markets")
@@ -47,7 +48,7 @@ interface CoinGekkoApiService {
         @Query("order") order: String = "market_cap_desc",
         @Query("per_page") perPage: Int = 50,
         @Query("page") page: Int = 1,
-        @Query("sparkline") sparkline: Boolean = false,
+        @Query("sparkline") sparkline: Boolean = false
     ): Deferred<List<NetworkCoin>>
 }
 

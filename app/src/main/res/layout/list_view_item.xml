@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="coin"
+            type="com.bekzad.cryptotracker.data.domain.Coin" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/header_cl"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+        <TextView
+            android:id="@+id/position_tv"
+            android:layout_width="40dp"
+            android:layout_height="80dp"
+            android:gravity="center"
+            android:text="@{String.format(@string/market_cap_rank, coin.marketCapRank)}"
+            android:textColor="@color/primaryTextColor"
+            android:layout_alignParentTop="true"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/symbol_cl"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@id/position_tv">
+
+            <ImageView
+                android:id="@+id/symbol_iv"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:contentDescription="@string/coin_logo"
+                android:padding="10dp"
+                app:imageUrl="@{coin.image}"
+                app:layout_constraintBottom_toTopOf="@+id/symbol_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread" />
+
+            <TextView
+                android:id="@+id/symbol_tv"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:gravity="center_horizontal"
+                android:text="@{coin.symbol.toUpperCase()}"
+                android:textColor="@color/primaryTextColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/symbol_iv"
+                tools:text="btc" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/price_tv"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:gravity="center"
+            android:text="@{String.format(@string/current_price, coin.currentPrice)}"
+            android:textColor="@color/primaryTextColor"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@id/symbol_cl"/>
+
+        <TextView
+            android:id="@+id/price_change_tv"
+            android:layout_width="50dp"
+            android:layout_height="80dp"
+            android:gravity="center"
+            android:text="@{String.format(@string/price_change, coin.priceChange)}"
+            app:textColor="@{coin.priceChange}"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@id/price_tv"/>
+
+        <TextView
+            android:id="@+id/market_cap_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:gravity="center"
+            android:text="@{String.format(@string/market_cap, coin.marketCap)}"
+            android:textColor="@color/primaryTextColor"
+            tools:text="36987453123126"
+            android:layout_toEndOf="@id/price_change_tv"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+</layout>
