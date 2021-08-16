@@ -9,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface CoinDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllCoins(vararg videos: DatabaseCoin)
+    suspend fun insertAllCoins(vararg databaseCoins: DatabaseCoin)
 
     @Query("SELECT * FROM coin_table")
     fun observeCoins(): LiveData<List<DatabaseCoin>>

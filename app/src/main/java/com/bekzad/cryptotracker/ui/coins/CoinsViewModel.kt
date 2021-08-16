@@ -3,16 +3,15 @@ package com.bekzad.cryptotracker.ui.coins
 import android.app.Application
 import androidx.lifecycle.*
 import com.bekzad.cryptotracker.data.domain.Coin
-import com.bekzad.cryptotracker.data.repository.CoinRepository
-import com.bekzad.cryptotracker.data.source.local.CoinDatabase
+import com.bekzad.cryptotracker.data.repository.DefaultCoinsRepository
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 enum class CoinsApiStatus { LOADING, ERROR, DONE }
 
 class CoinsViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val database = CoinDatabase.getDatabase(app)
-    private val repository = CoinRepository(database)
+    private val repository = DefaultCoinsRepository.getRepository(app)
 
     private val _status = MutableLiveData<CoinsApiStatus>()
     val status: LiveData<CoinsApiStatus> = _status
@@ -21,6 +20,7 @@ class CoinsViewModel(app: Application) : AndroidViewModel(app) {
 
     init {
         // At initialization refresh the database
+        Timber.i("In viewModel refreshing")
         refresh()
     }
 

@@ -4,8 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.bekzad.cryptotracker.data.domain.Coin
-import com.bekzad.cryptotracker.data.source.remote.NetworkCoin
-import java.math.BigDecimal
 
 /**
  * These data classes are for saving to a database and retrieving
