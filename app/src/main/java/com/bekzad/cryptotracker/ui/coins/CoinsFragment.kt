@@ -1,5 +1,7 @@
 package com.bekzad.cryptotracker.ui.coins
 
+import android.app.AlertDialog
+import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -8,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bekzad.cryptotracker.databinding.FragmentCoinsBinding
 
@@ -30,35 +33,61 @@ class CoinsFragment : Fragment() {
     ): View {
 
         binding = FragmentCoinsBinding.inflate(inflater, container, false)
-
         binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-
-        val adapter = CoinsAdapter(CoinClickListener {
-            Toast.makeText(context, "will move to detailview of ${it.name}", Toast.LENGTH_SHORT).show()
-        })
-
-        binding.coinsListRv.adapter = adapter
-
-        binding.swipeRefresh.setOnRefreshListener {
-            viewModel.refresh()
-            binding.swipeRefresh.isRefreshing = false
-        }
-
-        checkNetworkConnection(requireContext())
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Setting up bindings and adapters
+        binding.lifecycleOwner = viewLifecycleOwner
+        setupAdapter()
+        setUpRefreshLayout()
+        setUpNetworkStatus()
     }
 
-    private fun checkNetworkConnection(context: Context) {
-        val ConnectionManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = ConnectionManager.activeNetworkInfo
-        if (networkInfo == null || networkInfo.isConnected == false) {
-            Toast.makeText(context, "Network Not Available", Toast.LENGTH_LONG).show()
+    private fun setupAdapter() {
+        val adapter = CoinsAdapter(CoinClickListener {
+            Toast.makeText(context, "will move to detailview of ${it.name}",
+                Toast.LENGTH_SHORT).show()
+        })
+
+        binding.coinsListRv.adapter = adapter
+    }
+
+    private fun setUpRefreshLayout() {
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.refresh()
         }
+    }
+
+    private fun setUpNetworkStatus() {
+        viewModel.status.observe(viewLifecycleOwner, Observer { status ->
+            status?.let {
+                when(it) {
+                    CoinsApiStatus.LOADING -> {
+                        binding.swipeRefresh.isRefreshing = true
+                    }
+                    CoinsApiStatus.DONE -> {
+                        binding.swipeRefresh.isRefreshing = false
+                    }
+                    CoinsApiStatus.ERROR -> {
+                        showAlert()
+                        viewModel.alertFinished()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun showAlert() {
+        AlertDialog.Builder(requireContext())
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle("Internet Connection Alert")
+            .setMessage("Please connect to network")
+            .setPositiveButton("Close") { dialogInterface, i ->
+            }.show()
     }
 }

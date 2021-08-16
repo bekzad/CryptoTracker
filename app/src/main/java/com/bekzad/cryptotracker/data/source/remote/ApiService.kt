@@ -17,10 +17,13 @@
 
 package com.bekzad.cryptotracker.data.source.remote
 
+import com.bekzad.cryptotracker.BuildConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -61,7 +64,19 @@ object Network {
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .client(addLoggingInterceptor())
             .build()
 
     val api = retrofit.create(CoinGekkoApiService::class.java)
+}
+
+private fun addLoggingInterceptor(): OkHttpClient {
+    val okHttpClient = OkHttpClient.Builder()
+    val logging = HttpLoggingInterceptor()
+        .setLevel(HttpLoggingInterceptor.Level.BODY)
+
+    if (BuildConfig.DEBUG) {
+        okHttpClient.addInterceptor(logging)
+    }
+    return okHttpClient.build()
 }

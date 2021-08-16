@@ -7,10 +7,18 @@ import com.bekzad.cryptotracker.data.repository.CoinRepository
 import com.bekzad.cryptotracker.data.source.local.CoinDatabase
 import kotlinx.coroutines.launch
 
+enum class CoinsApiStatus { LOADING, ERROR, DONE }
+
 class CoinsViewModel(app: Application) : AndroidViewModel(app) {
 
     private val database = CoinDatabase.getDatabase(app)
     private val repository = CoinRepository(database)
+
+    private val _status = MutableLiveData<CoinsApiStatus>()
+    val status: LiveData<CoinsApiStatus> = _status
+
+    private val _dataLoading = MutableLiveData<Boolean>()
+    val dataLoading: LiveData<Boolean> = _dataLoading
 
     val coins: LiveData<List<Coin>> = repository.coins
 
@@ -24,9 +32,22 @@ class CoinsViewModel(app: Application) : AndroidViewModel(app) {
 
     fun refresh() {
         viewModelScope.launch {
-            repository.refreshCoins()
-//            _coin.postValue(repository.getAllCoins())
+            _status.value = CoinsApiStatus.LOADING
+            try {
+                repository.refreshCoins()
+                _status.value = CoinsApiStatus.DONE
+
+            } catch(error: Throwable) {
+                _status.value = CoinsApiStatus.ERROR
+            }
+
+            //            _coin.postValue(repository.getAllCoins())
+
         }
+    }
+
+    fun alertFinished() {
+        _status.value = CoinsApiStatus.DONE
     }
 }
 
