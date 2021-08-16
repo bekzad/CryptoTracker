@@ -17,13 +17,7 @@ class CoinsViewModel(app: Application) : AndroidViewModel(app) {
     private val _status = MutableLiveData<CoinsApiStatus>()
     val status: LiveData<CoinsApiStatus> = _status
 
-    private val _dataLoading = MutableLiveData<Boolean>()
-    val dataLoading: LiveData<Boolean> = _dataLoading
-
     val coins: LiveData<List<Coin>> = repository.coins
-
-//    private val _coin = MutableLiveData<List<Coin>>()
-//    val coin: LiveData<List<Coin>> = _coin
 
     init {
         // At initialization refresh the database
@@ -40,10 +34,12 @@ class CoinsViewModel(app: Application) : AndroidViewModel(app) {
             } catch(error: Throwable) {
                 _status.value = CoinsApiStatus.ERROR
             }
-
-            //            _coin.postValue(repository.getAllCoins())
-
         }
+    }
+
+    fun searchDatabase(searchQuery: String): LiveData<List<Coin>> {
+        val query = "%$searchQuery%"
+        return repository.searchDatabase(query)
     }
 
     fun alertFinished() {

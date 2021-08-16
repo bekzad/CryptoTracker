@@ -14,6 +14,7 @@ interface CoinDao {
     @Query("SELECT * FROM coin_table")
     fun observeCoins(): LiveData<List<DatabaseCoin>>
 
-    @Query("SELECT * FROM coin_table")
-    suspend fun getCoins(): List<DatabaseCoin>
+    @Query("SELECT * FROM coin_table WHERE name LIKE :searchQuery OR symbol LIKE :searchQuery")
+    fun searchDatabase(searchQuery: String): LiveData<List<DatabaseCoin>>
+
 }

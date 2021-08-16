@@ -5,18 +5,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.bekzad.cryptotracker.data.domain.Coin
-import com.bekzad.cryptotracker.ui.coins.CoinsAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
-@BindingAdapter("listData")
-fun RecyclerView.bindRecyclerView(data: List<Coin>?) {
-    val adapter = this.adapter as CoinsAdapter
-    adapter.submitList(data)
-}
+//@BindingAdapter("listData")
+//fun RecyclerView.bindRecyclerView(data: List<Coin>?) {
+//    val adapter = this.adapter as CoinsAdapter
+//    adapter.submitList(data)
+//}
 
+/**
+ * For getting an image from the specified url and setting it to that view
+ */
 @BindingAdapter("imageUrl")
 fun ImageView.bindImage(imgUrl: String?) {
     imgUrl?.let {
@@ -31,6 +31,9 @@ fun ImageView.bindImage(imgUrl: String?) {
     }
 }
 
+/**
+ * FOr changing the color of a text according to a given number
+ */
 @BindingAdapter("textColor")
 fun TextView.bindTextView(priceChange: Double?) {
     priceChange?.let { price ->

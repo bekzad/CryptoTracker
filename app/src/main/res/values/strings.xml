@@ -10,4 +10,5 @@
     <string name="market_cap_rank">%,d</string>
     <string name="price_change">%.1f%%</string>
     <string name="current_price">$%,.2f</string>
+    <string name="search_menu_text">Search</string>
 </resources>

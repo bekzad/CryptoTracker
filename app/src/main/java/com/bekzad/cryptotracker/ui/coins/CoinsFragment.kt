@@ -1,22 +1,22 @@
 package com.bekzad.cryptotracker.ui.coins
 
-import android.app.AlertDialog
-import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bekzad.cryptotracker.R
 import com.bekzad.cryptotracker.databinding.FragmentCoinsBinding
 
-class CoinsFragment : Fragment() {
+class CoinsFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private lateinit var binding: FragmentCoinsBinding
+
+    private val adapter: CoinsAdapter by lazy {
+        CoinsAdapter(CoinClickListener {
+            "Future feature: Will move to detailview of ${it.name}".toast(context)
+        })
+    }
 
     private val viewModel: CoinsViewModel by lazy {
         val activity = requireNotNull(this.activity) {
@@ -34,7 +34,7 @@ class CoinsFragment : Fragment() {
 
         binding = FragmentCoinsBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
-
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -49,12 +49,12 @@ class CoinsFragment : Fragment() {
     }
 
     private fun setupAdapter() {
-        val adapter = CoinsAdapter(CoinClickListener {
-            Toast.makeText(context, "will move to detailview of ${it.name}",
-                Toast.LENGTH_SHORT).show()
-        })
-
         binding.coinsListRv.adapter = adapter
+        viewModel.coins.observe(viewLifecycleOwner, { list ->
+            list?.let {
+                adapter.submitList(it)
+            }
+        })
     }
 
     private fun setUpRefreshLayout() {
@@ -63,8 +63,11 @@ class CoinsFragment : Fragment() {
         }
     }
 
+    /**
+     * Shows the refresher icon if loading alerts the user if network error happened
+     */
     private fun setUpNetworkStatus() {
-        viewModel.status.observe(viewLifecycleOwner, Observer { status ->
+        viewModel.status.observe(viewLifecycleOwner, { status ->
             status?.let {
                 when(it) {
                     CoinsApiStatus.LOADING -> {
@@ -74,7 +77,7 @@ class CoinsFragment : Fragment() {
                         binding.swipeRefresh.isRefreshing = false
                     }
                     CoinsApiStatus.ERROR -> {
-                        showAlert()
+                        requireContext().showInternetAlert()
                         viewModel.alertFinished()
                     }
                 }
@@ -82,12 +85,34 @@ class CoinsFragment : Fragment() {
         })
     }
 
-    private fun showAlert() {
-        AlertDialog.Builder(requireContext())
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .setTitle("Internet Connection Alert")
-            .setMessage("Please connect to network")
-            .setPositiveButton("Close") { dialogInterface, i ->
-            }.show()
+    /**
+     *  Creating a search menu
+     *  Can be searched by name and a symbol of a coin
+     */
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu, menu)
+        val search = menu.findItem(R.id.menu_search)
+        val searchView = search.actionView as SearchView
+        searchView.isSubmitButtonEnabled = true
+        searchView.setOnQueryTextListener(this)
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        if(query != null){
+            searchDatabase(query)
+        }
+        return true
+    }
+
+    private fun searchDatabase(query: String) {
+        viewModel.searchDatabase(query).observe(viewLifecycleOwner, { list ->
+            list?.let {
+                adapter.submitList(it)
+            }
+        })
     }
 }

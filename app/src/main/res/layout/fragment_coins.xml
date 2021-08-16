@@ -76,7 +76,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/primaryDarkColor"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:listData="@{viewModel.coins}"
                 tools:listitem="@layout/list_view_item" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
