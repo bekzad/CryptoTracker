@@ -1,17 +1,14 @@
 package com.bekzad.cryptotracker.ui.coins
 
-import android.app.Application
 import androidx.lifecycle.*
 import com.bekzad.cryptotracker.data.domain.Coin
-import com.bekzad.cryptotracker.data.repository.DefaultCoinsRepository
+import com.bekzad.cryptotracker.data.repository.CoinsRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 enum class CoinsApiStatus { LOADING, ERROR, DONE }
 
-class CoinsViewModel(app: Application) : AndroidViewModel(app) {
-
-    private val repository = DefaultCoinsRepository.getRepository(app)
+class CoinsViewModel(private val repository: CoinsRepository) : ViewModel() {
 
     private val _status = MutableLiveData<CoinsApiStatus>()
     val status: LiveData<CoinsApiStatus> = _status
@@ -49,8 +46,8 @@ class CoinsViewModel(app: Application) : AndroidViewModel(app) {
 
 @Suppress("UNCHECKED_CAST")
 class CoinsViewModelFactory (
-    private val app: Application
+    private val repository: CoinsRepository
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>) =
-        (CoinsViewModel(app) as T)
+        (CoinsViewModel(repository) as T)
 }

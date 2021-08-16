@@ -13,6 +13,8 @@ buildscript {
         version_recyclerview = '1.2.1'
         version_glide = '4.12.0'
         version_swipe_refresh = '1.1.0'
+        version_junit = '4.12'
+        version_hamcrest = '2.2'
     }
 
 

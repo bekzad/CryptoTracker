@@ -6,8 +6,8 @@ import timber.log.Timber
 
 class CryptoApplication : Application() {
 
-//    val coinsRepository: CoinsRepository
-//        get() = ServiceLocator.provideCoinRepository(this)
+    val coinsRepository: CoinsRepository
+        get() = ServiceLocator.provideCoinsRepository(this)
 
     override fun onCreate() {
         super.onCreate()

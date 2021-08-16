@@ -5,6 +5,7 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.bekzad.cryptotracker.CryptoApplication
 import com.bekzad.cryptotracker.R
 import com.bekzad.cryptotracker.databinding.FragmentCoinsBinding
 
@@ -19,10 +20,8 @@ class CoinsFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private val viewModel by viewModels<CoinsViewModel> {
-        val activity = requireNotNull(this.activity) {
-            "You can only access the viewModel after onViewCreated()"
-        }
-        CoinsViewModelFactory(activity.application)
+        CoinsViewModelFactory((requireContext().applicationContext
+                as CryptoApplication).coinsRepository)
     }
 
     override fun onCreateView(

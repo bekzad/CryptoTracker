@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bekzad.cryptotracker.data.domain.Coin
 import com.bekzad.cryptotracker.data.source.CoinsDataSource
-import timber.log.Timber
 
 object CoinsRemoteDataSource : CoinsDataSource {
 
@@ -28,8 +27,6 @@ object CoinsRemoteDataSource : CoinsDataSource {
     }
 
     override suspend fun getAllCoins(pageNumber: Int): List<NetworkCoin> {
-        val coins = Network.api.getAllCoins(page = pageNumber).await()
-        Timber.i(coins.toString())
-        return coins
+        return Network.api.getAllCoins(page = pageNumber).await()
     }
 }

@@ -87,4 +87,10 @@ dependencies {
 
     // Swipe Refresh Layout
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$version_swipe_refresh"
+
+    // For testing local unit tests
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version_kotlin_coroutines"
+    testImplementation "junit:junit:$version_junit"
+    testImplementation "org.hamcrest:hamcrest:$version_hamcrest"
+
 }
