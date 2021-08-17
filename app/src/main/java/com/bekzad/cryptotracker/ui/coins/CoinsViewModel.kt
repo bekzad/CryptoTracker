@@ -13,11 +13,10 @@ class CoinsViewModel(private val repository: CoinsRepository) : ViewModel() {
     private val _status = MutableLiveData<CoinsApiStatus>()
     val status: LiveData<CoinsApiStatus> = _status
 
-    val coins: LiveData<List<Coin>> = repository.coins
+    val coins: LiveData<List<Coin>> = repository.observeCoins()
 
     init {
         // At initialization refresh the database
-        Timber.i("In viewModel refreshing")
         refresh()
     }
 

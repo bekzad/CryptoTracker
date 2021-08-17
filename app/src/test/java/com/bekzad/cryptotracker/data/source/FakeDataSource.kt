@@ -17,7 +17,7 @@ class FakeDataSource(var coins: MutableList<Coin>? = mutableListOf()) : CoinsDat
     }
 
     override fun observeCoins(): LiveData<List<Coin>> {
-        return MutableLiveData()
+        return MutableLiveData<List<Coin>>(coins)
     }
 
     override fun searchDatabase(searchQuery: String): LiveData<List<Coin>> {

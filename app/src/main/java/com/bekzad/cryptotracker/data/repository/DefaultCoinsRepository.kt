@@ -16,7 +16,7 @@ class DefaultCoinsRepository (
     /**
      * We can observe our data right from the database
      */
-    override val coins: LiveData<List<Coin>> = localDataSource.observeCoins()
+    override fun observeCoins(): LiveData<List<Coin>> = localDataSource.observeCoins()
 
     /**
      * Searching the database by given query

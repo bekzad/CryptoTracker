@@ -1,11 +1,15 @@
 package com.bekzad.cryptotracker.data.repository
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bekzad.cryptotracker.MainCoroutineRule
 import com.bekzad.cryptotracker.data.domain.Coin
 import com.bekzad.cryptotracker.data.source.FakeDataSource
+import com.bekzad.cryptotracker.getOrAwaitValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.`is`
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -14,6 +18,13 @@ import org.junit.Test
  * Testing Repository class
  */
 class DefaultCoinsRepositoryTest {
+
+    @get:Rule
+    var instantExecutorRule = InstantTaskExecutorRule()
+
+    // Swaps Dispatcher.Main for a TestCoroutineDispatcher
+    @get:Rule
+    val mainCoroutineRule = MainCoroutineRule()
 
     private lateinit var remoteDataSource: FakeDataSource
     private lateinit var localDataSource: FakeDataSource
@@ -36,11 +47,6 @@ class DefaultCoinsRepositoryTest {
     private val remoteCoins = listOf(coin1, coin2).sortedBy { it.id }
     private val localCoins = listOf(coin3).sortedBy { it.id }
 
-    // It will change the Main coroutine to testCoroutineDispatcher
-    @ExperimentalCoroutinesApi
-    @get:Rule
-    val mainCoroutineRule = MainCoroutineRule()
-
 
     @Before
     fun createRepository() {
@@ -55,12 +61,13 @@ class DefaultCoinsRepositoryTest {
     @Test
     fun geCoins_requestAllCoinsFromRemoteDataSource() = mainCoroutineRule.runBlockingTest {
 
-        // When coins are requested from the tasks repository
+        // When refreshing the repository
         coinsRepository.refreshCoins()
 
-        // Then coins are loaded from the remote data source
-//        MatcherAssert.assertThat(coinsRepository.coins, `is`(remoteTasks))
+        // Wait for the liveData values
+        val value = coinsRepository.observeCoins().getOrAwaitValue()
+
+        assertThat(value.size, `is`(3))
+
     }
-
-
 }
