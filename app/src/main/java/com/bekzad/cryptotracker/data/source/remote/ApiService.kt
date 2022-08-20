@@ -63,7 +63,7 @@ object Network {
     private val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory()) // This is not needed anymore
             .client(addLoggingInterceptor())
             .build()
 

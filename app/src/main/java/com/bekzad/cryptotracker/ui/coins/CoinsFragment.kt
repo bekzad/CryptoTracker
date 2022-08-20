@@ -19,6 +19,7 @@ class CoinsFragment : Fragment(), SearchView.OnQueryTextListener {
         })
     }
 
+    // This is wrong if I want to share the same viewmodel with the activity
     private val viewModel by viewModels<CoinsViewModel> {
         CoinsViewModelFactory((requireContext().applicationContext
                 as CryptoApplication).coinsRepository)
@@ -31,7 +32,7 @@ class CoinsFragment : Fragment(), SearchView.OnQueryTextListener {
     ): View {
 
         binding = FragmentCoinsBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
+
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -40,6 +41,7 @@ class CoinsFragment : Fragment(), SearchView.OnQueryTextListener {
         super.onViewCreated(view, savedInstanceState)
 
         // Setting up bindings and adapters
+        binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         setupAdapter()
         setUpRefreshLayout()
